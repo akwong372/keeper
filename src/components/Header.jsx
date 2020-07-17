@@ -1,9 +1,10 @@
 import React from 'react';
+import BookmarkIcon from '@material-ui/icons/Bookmark';
 
 const Header = () => {
     return (
         <header>
-            <h1>Keeper</h1>
+            <h1><BookmarkIcon/>Keeper</h1>
         </header>
     );
 };

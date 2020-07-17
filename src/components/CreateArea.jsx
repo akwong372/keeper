@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import AddIcon from '@material-ui/icons/Add';
+import Zoom from '@material-ui/core/Zoom';
+import Fab from '@material-ui/core/Fab';
 import { v4 as uuidv4 } from 'uuid';
 
 const CreateArea = props => {
@@ -8,6 +11,8 @@ const CreateArea = props => {
         title: '',
         content: ''
     });
+
+    const [focus, setFocus] = useState(false)
 
     const handleChange = e => {
         const { name, value } = e.target;
@@ -30,15 +35,24 @@ const CreateArea = props => {
                 title: '',
                 content: ''
             }));
+            setFocus(() => false)
         }
+    }
+
+    const onFocus = () => {
+        setFocus(() => true);
     }
 
     return (
         <div>
-            <form onSubmit={e => submitNote(e)}>
-                <input name='title' placeholder='Title' onChange={handleChange} value={note.title} />
-                <textarea name='content' placeholder='Take a note...' rows='3' onChange={handleChange} value={note.content} />
-                <button>Add</button>
+            <form className='create-note' onSubmit={e => submitNote(e)} >
+                {focus && <input name='title' placeholder='Title' onChange={handleChange} value={note.title} />}
+                <textarea name='content' placeholder='Take a note...' rows={focus ? 3 : 1} onChange={handleChange} onFocus={onFocus} value={note.content} />
+                <Zoom in={focus} timeout={250}>
+                    <Fab color="primary" aria-label="add" type="submit">
+                        <AddIcon />
+                    </Fab>
+                </Zoom>
             </form>
         </div>
     );

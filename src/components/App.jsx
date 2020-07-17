@@ -9,14 +9,6 @@ const App = () => {
     const [notes, setNotes] = useState([]);
 
     const addNote = note => {
-        // const [title, content]
-        // const title = note[0].value;
-        // const content = note[1].value;
-        // const newNote = {
-        //     id: uuidv4(),
-        //     title: title,
-        //     content: content
-        // };
         return setNotes(prev => [...prev, note]);
     };
 
