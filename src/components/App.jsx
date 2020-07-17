@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import Header from './Header';
 import Note from './Note';
 import Footer from './Footer';
@@ -21,7 +21,7 @@ const App = () => {
     };
 
     const deleteNote = id => {
-        console.log(id)
+        setNotes(prev => prev.filter(note => note.id !== id));
     }
 
     const renderNotes = (note) => {
