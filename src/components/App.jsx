@@ -3,21 +3,21 @@ import Header from './Header';
 import Note from './Note';
 import Footer from './Footer';
 import CreateArea from "./CreateArea";
-import { v4 as uuidv4 } from 'uuid';
 
 const App = () => {
 
     const [notes, setNotes] = useState([]);
 
     const addNote = note => {
-        const title = note[0].value;
-        const content = note[1].value;
-        const newNote = {
-            id: uuidv4(),
-            title: title,
-            content: content
-        };
-        return setNotes(prev => [...prev, newNote]);
+        // const [title, content]
+        // const title = note[0].value;
+        // const content = note[1].value;
+        // const newNote = {
+        //     id: uuidv4(),
+        //     title: title,
+        //     content: content
+        // };
+        return setNotes(prev => [...prev, note]);
     };
 
     const deleteNote = id => {
