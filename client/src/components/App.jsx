@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import Header from './Header';
 import Note from './Note';
 import Footer from './Footer';
@@ -24,12 +25,23 @@ const App = () => {
         );
     };
 
-    const loginSubmit = e =>{
+    const loginSubmit = e => {
         e.preventDefault();
-        console.log(e.target[0].value)
+        const user = {
+            username: e.target[0].value,
+            password: e.target[1].value
+        }
+        axios.post('/login', user)
+            .then((response) => {
+                console.log(response);
+                setLogin(true)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     }
 
-    const checkLogin = () => {
+    const checkLogin = () => {//render login form is not logged in
         if (login) {
             return (
                 <div>
