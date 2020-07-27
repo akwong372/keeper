@@ -1,17 +1,18 @@
 import React from 'react';
 import InputBox from './InputBox';
 
-const Login = props => {
+const Register = props => {
     return (
         <div>
-            <form action='/login' method='POST' className="create-note" onSubmit={e => props.handleSubmit(e)}>
+            <form action='/register' method='POST' className="create-note" onSubmit={e => props.handleRegister(e)}>
                 <InputBox labelFor='username' labelText='Username' type='username' placeholder='username here' />
                 <InputBox labelFor='password' labelText='Password' type='password' placeholder='password here' />
-                <button>Login</button>
+                <InputBox labelFor='email' labelText='Email' type='email' placeholder='email here' />
+                <button />
             </form>
-            <button>register</button>
         </div>
+
     )
 };
 
-export default Login;
+export default Register;

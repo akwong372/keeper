@@ -15,8 +15,48 @@ app.get('/', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    console.log(req.body);
-    res.send('ok');
+    const user = new db.UserModel({
+        username: req.body.username,
+        password: req.body.password
+    });
+
+    db.UserModel.findOne({ user }, (err, userFound) => {
+        if (err) {
+            console.log(`Error finding user: ${err}`);
+        } 
+        if (!userFound){
+            console.log(userFound)
+            user.save(err=>{
+                if (err){ console.log(`Error saving user: ${err}`)}
+                res.send('ok');
+            })
+        } else {
+            res.send(userFound);
+        }
+    });
+});
+
+app.post('/register', (req, res) => {
+    const user = new db.UserModel({
+        username: req.body.username,
+        password: req.body.password,
+        email: req.body.email
+    });
+
+    db.UserModel.findOne({ user }, (err, userFound) => {
+        if (err) {
+            console.log(`Error finding user: ${err}`);
+        } 
+        if (!userFound){
+            console.log(userFound)
+            user.save(err=>{
+                if (err){ console.log(`Error saving user: ${err}`)}
+                res.send('ok');
+            })
+        } else {
+            res.send(userFound);
+        }
+    });
 })
 
 app.listen(port, console.log(`Listening on port ${port}`));

@@ -5,11 +5,13 @@ import Note from './Note';
 import Footer from './Footer';
 import CreateArea from './CreateArea';
 import Login from './Login';
+import Register from './Register';
 
 const App = () => {
 
     const [notes, setNotes] = useState([]);
     const [login, setLogin] = useState(false);
+    const [register, setRegister] = useState(true);
 
     const addNote = note => {
         return setNotes(prev => [...prev, note]);
@@ -33,7 +35,24 @@ const App = () => {
         }
         axios.post('/login', user)
             .then((response) => {
-                console.log(response);
+                console.log(response.data);
+                setLogin(true)
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
+
+    const registerSubmit = e => {
+        e.preventDefault();
+        const user = {
+            username: e.target[0].value,
+            email:e.target[1].value,
+            password: e.target[2].value
+        }
+        axios.post('/register', user)
+            .then((response) => {
+                console.log(response.data);
                 setLogin(true)
             })
             .catch((error) => {
@@ -49,6 +68,8 @@ const App = () => {
                     {notes.map(renderNotes)}
                 </div>
             );
+        } else if (register && !login){
+            return <Register handleRegister={registerSubmit} />
         } else {
             return <Login handleSubmit={loginSubmit} />
         }
