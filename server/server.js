@@ -25,11 +25,8 @@ app.post('/login', (req, res) => {
             console.log(`Error finding user: ${err}`);
         } 
         if (!userFound){
-            console.log(userFound)
-            user.save(err=>{
-                if (err){ console.log(`Error saving user: ${err}`)}
-                res.send('ok');
-            })
+            console.log(userFound);
+            res.send('pls use register page')
         } else {
             res.send(userFound);
         }
@@ -54,7 +51,7 @@ app.post('/register', (req, res) => {
                 res.send('ok');
             })
         } else {
-            res.send(userFound);
+            res.send('pls use login page');
         }
     });
 })

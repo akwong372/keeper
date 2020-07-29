@@ -5,7 +5,7 @@ const Header = () => {
     return (
         <header>
             <h1><BookmarkIcon/>Keeper</h1>
-            <p>log out</p>
+            <button>log out</button>
         </header>
     );
 };

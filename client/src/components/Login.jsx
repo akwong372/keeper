@@ -9,7 +9,7 @@ const Login = props => {
                 <InputBox labelFor='password' labelText='Password' type='password' placeholder='password here' />
                 <button>Login</button>
             </form>
-            <button>register</button>
+            <button onClick={props.toggleRegister}>Register New</button>
         </div>
     )
 };

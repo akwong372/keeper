@@ -60,6 +60,10 @@ const App = () => {
             });
     }
 
+    const toggleRegister = () => {
+        setRegister(!register);
+    }
+
     const checkLogin = () => {//render login form is not logged in
         if (login) {
             return (
@@ -69,9 +73,9 @@ const App = () => {
                 </div>
             );
         } else if (register && !login){
-            return <Register handleRegister={registerSubmit} />
+            return <Register handleRegister={registerSubmit} toggleRegister={toggleRegister}/>
         } else {
-            return <Login handleSubmit={loginSubmit} />
+            return <Login handleSubmit={loginSubmit} toggleRegister={toggleRegister}/>
         }
 
     }
