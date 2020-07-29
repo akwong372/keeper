@@ -45,11 +45,13 @@ const App = () => {
 
     const registerSubmit = e => {
         e.preventDefault();
+        e.persist()
         const user = {
             username: e.target[0].value,
-            email:e.target[1].value,
-            password: e.target[2].value
+            password:e.target[1].value,
+            email: e.target[2].value
         }
+        console.log(e)
         axios.post('/register', user)
             .then((response) => {
                 console.log(response.data);
@@ -64,7 +66,7 @@ const App = () => {
         setRegister(!register);
     }
 
-    const checkLogin = () => {//render login form is not logged in
+    const checkLogin = () => {//render login form if not logged in
         if (login) {
             return (
                 <div>

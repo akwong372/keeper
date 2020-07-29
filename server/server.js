@@ -15,16 +15,16 @@ app.get('/', (req, res) => {
 });
 
 app.post('/login', (req, res) => {
-    const user = new db.UserModel({
+    const userDetails = {
         username: req.body.username,
         password: req.body.password
-    });
+    };
 
-    db.UserModel.findOne({ user }, (err, userFound) => {
+    db.UserModel.findOne(userDetails, (err, userFound) => {
         if (err) {
             console.log(`Error finding user: ${err}`);
-        } 
-        if (!userFound){
+        }
+        if (!userFound) {
             console.log(userFound);
             res.send('pls use register page')
         } else {
@@ -39,15 +39,16 @@ app.post('/register', (req, res) => {
         password: req.body.password,
         email: req.body.email
     });
+    console.log(user)
 
-    db.UserModel.findOne({ user }, (err, userFound) => {
+    db.UserModel.findOne(user, (err, userFound) => {
         if (err) {
             console.log(`Error finding user: ${err}`);
-        } 
-        if (!userFound){
+        }
+        if (!userFound) {
             console.log(userFound)
-            user.save(err=>{
-                if (err){ console.log(`Error saving user: ${err}`)}
+            user.save(err => {
+                if (err) { console.log(`Error saving user: ${err}`) }
                 res.send('ok');
             })
         } else {

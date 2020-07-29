@@ -5,7 +5,8 @@ mongoose.connect('mongodb://localhost:27017/keeperDB', { useUnifiedTopology: tru
 
 const userSchema = new Schema({
     'username':  String,
-    'password': String
+    'password': String,
+    'email': String
 });
 
 const UserModel = mongoose.model('User', userSchema);
