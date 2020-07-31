@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
@@ -5,6 +6,7 @@ const path = require('path');
 const db = require('./db');
 const session = require('express-session');
 const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 // const localStrategy = require('passport-local').Strategy;
 
 const port = process.env.PORT || 8080;
@@ -22,17 +24,37 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_ID,
+    clientSecret: process.env.GOOGLE_SECRET,
+    callbackURL: 'http://localhost:3000/auth/google/login',
+    userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
+    passReqToCallback: true
+},
+    (req, accessToken, refreshToken, profile, cb) => {
+        db.UserModel.findOne({ googleId: profile.id }, (err, user) => {
+            if (user) {
+                return cb(err, user);
+            } else {
+                db.UserModel.create({ googleId: profile.id, username: 'test' }, (err, user) => {
+                    return cb(err, newUser);
+                })
+            }
+        });
+    }
+));
+
 passport.use(db.UserModel.createStrategy());
- 
-passport.serializeUser(function(user, done) {
+
+passport.serializeUser(function (user, done) {
     done(null, user.id);
-  });
-   
-  passport.deserializeUser(function(id, done) {
+});
+
+passport.deserializeUser(function (id, done) {
     db.UserModel.findById(id, function (err, user) {
-      done(err, user);
+        done(err, user);
     });
-  });
+});
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'))
@@ -44,22 +66,10 @@ app.post('/login', (req, res) => {
         password: req.body.password
     });
 
-    // db.UserModel.findOne(userDetails, (err, userFound) => {
-    //     if (err) {
-    //         console.log(`Error finding user: ${err}`);
-    //     }
-    //     if (!userFound) {
-    //         console.log(userFound);
-    //         res.send('pls use register page')
-    //     } else {
-    //         res.send(userFound);
-    //     }
-    // });
-
     req.login(userDetails, (err) => {
         if (err) {
-            console.log(`Error logging in: ${err}`);
-            return res.send('error logging in');
+            console.log(`Error logging in: ${err.name}: ${err.message}`);
+            res.send(err.message);
         } else {
             passport.authenticate('local')(req, res, () => {
                 res.send('logged in');
@@ -69,38 +79,26 @@ app.post('/login', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-    // const user = new db.UserModel({
-    //     username: req.body.username,
-    //     password: req.body.password,
-    //     email: req.body.email
-    // });
-    // console.log(user)
-
-    // db.UserModel.findOne(user, (err, userFound) => {
-    //     if (err) {
-    //         console.log(`Error finding user: ${err}`);
-    //     }
-    //     if (!userFound) {
-    //         console.log(userFound)
-    //         user.save(err => {
-    //             if (err) { console.log(`Error saving user: ${err}`) }
-    //             res.send('ok');
-    //         })
-    //     } else {
-    //         res.send('pls use login page');
-    //     }
-    // });
 
     db.UserModel.register({ username: req.body.username, email: req.body.email }, req.body.password, (err, user) => {
         if (err) {
-            console.log(`Error registering user: ${err}`);
-            res.redirect('error loggin in');
+            console.log(`Error registering: ${err.name}: ${err.message}`);
+            res.send(err.message);
         } else {
             passport.authenticate('local')(req, res, () => {
                 res.send('logged in');
             });
         }
     })
-})
+});
+
+app.get('/auth/google',(req, res)=>{console.log('what'); res.send('hi')})
+    // passport.authenticate('google', { scope: ['profile'] }));
+
+app.get('/auth/google/login',
+    passport.authenticate('google'),
+    function (req, res) {
+        res.redirect('/');
+    });
 
 app.listen(port, console.log(`Listening on port ${port}`));

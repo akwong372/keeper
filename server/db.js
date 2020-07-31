@@ -7,7 +7,8 @@ mongoose.connect('mongodb://localhost:27017/keeperDB', { useUnifiedTopology: tru
 const userSchema = new Schema({
     'username':  String,
     'password': String,
-    'email': String
+    'email': String,
+    'googleId': String
 });
 
 userSchema.plugin(passportLocalMongoose);

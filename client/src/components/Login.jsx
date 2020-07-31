@@ -10,6 +10,9 @@ const Login = props => {
                 <button>Login</button>
             </form>
             <button onClick={props.toggleRegister}>Register New</button>
+            <div>
+                <a href="/auth/google" role="button">Sign In with Google</a>
+            </div>
         </div>
     )
 };
