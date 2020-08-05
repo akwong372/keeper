@@ -1,5 +1,10 @@
 import React from 'react';
+// import GoogleLogin from 'react-google-login';
 import InputBox from './InputBox';
+
+// const responseGoogle = (data) => {
+//     console.log(data)
+// }
 
 const Login = props => {
     return (
@@ -11,8 +16,15 @@ const Login = props => {
             </form>
             <button onClick={props.toggleRegister}>Register New</button>
             <div>
-                <a href="/auth/google" role="button">Sign In with Google</a>
+                <a href="http://localhost:8080/auth/google">Sign In with Google</a>
             </div>
+            {/* <GoogleLogin
+                clientId=""
+                buttonText="Login with Google"
+                onSuccess={responseGoogle}
+                onFailure={responseGoogle}
+                cookiePolicy={'single_host_origin'}
+            /> */}
         </div>
     )
 };

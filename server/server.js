@@ -15,10 +15,19 @@ app.use(express.static(path.join(__dirname, '../build')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(function (err, req, res, next) {
+    console.error(err.stack)
+    res.status(500).send('Something broke!')
+})
+
 app.use(session({
     secret: 'verysecretstring',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+        sameSite: 'none',
+        secure: true
+    }
 }));
 
 app.use(passport.initialize());
@@ -27,16 +36,21 @@ app.use(passport.session());
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_ID,
     clientSecret: process.env.GOOGLE_SECRET,
-    callbackURL: 'http://localhost:3000/auth/google/login',
+    callbackURL: 'http://localhost:8080/auth/google/login',
     userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
     passReqToCallback: true
 },
     (req, accessToken, refreshToken, profile, cb) => {
+        console.log(profile)
         db.UserModel.findOne({ googleId: profile.id }, (err, user) => {
             if (user) {
                 return cb(err, user);
             } else {
-                db.UserModel.create({ googleId: profile.id, username: 'test' }, (err, user) => {
+                db.UserModel.create({
+                    googleId: profile.id,
+                    username: profile._json.given_name,
+                    email: profile._json.email
+                }, (err, newUser) => {
                     return cb(err, newUser);
                 })
             }
@@ -60,22 +74,23 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../build/index.html'))
 });
 
-app.post('/login', (req, res) => {
-    const userDetails = new db.UserModel({
-        username: req.body.username,
-        password: req.body.password
-    });
+app.post('/login', (req, res, next) => {
 
-    req.login(userDetails, (err) => {
+    passport.authenticate('local', (err, user, info) => {
         if (err) {
-            console.log(`Error logging in: ${err.name}: ${err.message}`);
-            res.send(err.message);
-        } else {
-            passport.authenticate('local')(req, res, () => {
-                res.send('logged in');
-            });
+            return next(err);
         }
-    });
+        if (!user) {
+            return res.send(info);
+        }
+        req.logIn(user, function (logInErr) {
+            if (logInErr) {
+                return next(logInErr);
+            }
+            return res.send('logged in');
+        });
+    })(req, res, next);
+
 });
 
 app.post('/register', (req, res) => {
@@ -92,13 +107,13 @@ app.post('/register', (req, res) => {
     })
 });
 
-app.get('/auth/google',(req, res)=>{console.log('what'); res.send('hi')})
-    // passport.authenticate('google', { scope: ['profile'] }));
+app.get('/auth/google',
+    passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get('/auth/google/login',
     passport.authenticate('google'),
     function (req, res) {
-        res.redirect('/');
+        res.redirect('http://localhost:3000/');
     });
 
 app.listen(port, console.log(`Listening on port ${port}`));
