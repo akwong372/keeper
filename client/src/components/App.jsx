@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+// import Cookies from 'js-cookie';
 import Header from './Header';
 import Note from './Note';
 import Footer from './Footer';
@@ -12,6 +13,19 @@ const App = () => {
     const [notes, setNotes] = useState([]);
     const [login, setLogin] = useState(false);
     const [register, setRegister] = useState(true);
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/loggedin')
+            .then((response) => {
+                if (response.data.cookies){
+                    setLogin(true);
+                }
+                console.log(response);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    });
 
     const addNote = note => {
         return setNotes(prev => [...prev, note]);
@@ -48,10 +62,9 @@ const App = () => {
         e.persist()
         const user = {
             username: e.target[0].value,
-            password:e.target[1].value,
+            password: e.target[1].value,
             email: e.target[2].value
         }
-        console.log(e)
         axios.post('/register', user)
             .then((response) => {
                 console.log(response.data);
@@ -74,10 +87,10 @@ const App = () => {
                     {notes.map(renderNotes)}
                 </div>
             );
-        } else if (register && !login){
-            return <Register handleRegister={registerSubmit} toggleRegister={toggleRegister}/>
+        } else if (register && !login) {
+            return <Register handleRegister={registerSubmit} toggleRegister={toggleRegister} />
         } else {
-            return <Login handleSubmit={loginSubmit} toggleRegister={toggleRegister}/>
+            return <Login handleSubmit={loginSubmit} toggleRegister={toggleRegister} />
         }
 
     }
