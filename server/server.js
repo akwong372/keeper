@@ -31,7 +31,7 @@ const authCheck = (req, res, next) => {
     }
 };
 
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
     console.error(err.stack)
     res.status(500).send('Something broke!')
 });
@@ -62,7 +62,8 @@ passport.use(new GoogleStrategy({
                 db.UserModel.create({
                     googleId: profile.id,
                     username: profile._json.given_name,
-                    email: profile._json.email
+                    email: profile._json.email,
+                    notes:[]
                 }, (err, newUser) => {
                     return cb(err, newUser);
                 })
@@ -73,18 +74,17 @@ passport.use(new GoogleStrategy({
 
 passport.use(db.UserModel.createStrategy());
 
-passport.serializeUser(function (user, done) {
+passport.serializeUser((user, done) => {
     done(null, user.id);
 });
 
-passport.deserializeUser(function (id, done) {
-    db.UserModel.findById(id, function (err, user) {
+passport.deserializeUser((id, done) => {
+    db.UserModel.findById(id, (err, user) => {
         done(err, user);
     });
 });
 
 app.get('/loggedin', authCheck, (req, res) => {
-    console.log(req.cookies)
     res.status(200).json({
         authenticated: true,
         message: "user successfully authenticated",
@@ -113,14 +113,14 @@ app.post('/login', (req, res, next) => {
 
 });
 
-app.get('/logout', function (req, res) {
+app.get('/logout', (req, res) => {
     req.logout();
     res.redirect('http://localhost:3000/');
 });
 
 app.post('/register', (req, res) => {
 
-    db.UserModel.register({ username: req.body.username, email: req.body.email }, req.body.password, (err, user) => {
+    db.UserModel.register({ username: req.body.username, email: req.body.email, notes: [] }, req.body.password, (err, user) => {
         if (err) {
             console.log(`Error registering: ${err.name}: ${err.message}`);
             res.send(err.message);
@@ -137,8 +137,22 @@ app.get('/auth/google',
 
 app.get('/auth/google/login',
     passport.authenticate('google'),
-    function (req, res) {
+    (req, res) => {
         res.redirect('http://localhost:3000/');
     });
+
+app.post('/note', (req, res) => {
+    let note = { ...req.body }
+    let userId = req.user._id
+    db.UserModel.findByIdAndUpdate(userId, {
+        $push: {
+            notes: note
+        }
+    }, {new: true, useFindAndModify: false}, (err, user) => {
+        console.log(user)
+    })
+    res.send('ok')
+})
+
 
 app.listen(port, console.log(`Listening on port ${port}`));

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// import Cookies from 'js-cookie';
 import Header from './Header';
 import Note from './Note';
 import Footer from './Footer';
@@ -19,13 +18,14 @@ const App = () => {
             .then((response) => {
                 if (response.data.cookies){
                     setLogin(true);
+                    setNotes(response.data.user.notes)
                 }
                 console.log(response);
             })
             .catch((err) => {
                 console.log(err);
-            })
-    });
+            });
+    }, []);
 
     const addNote = note => {
         return setNotes(prev => [...prev, note]);
@@ -55,7 +55,7 @@ const App = () => {
             .catch((error) => {
                 console.log(error);
             });
-    }
+    };
 
     const registerSubmit = e => {
         e.preventDefault();
@@ -73,11 +73,17 @@ const App = () => {
             .catch((error) => {
                 console.log(error);
             });
+    };
+
+    const handleLogout = () => {
+        axios.get('/logout')
+        .then(() => setLogin(false))
+        .catch(err => console.log(err))
     }
 
     const toggleRegister = () => {
         setRegister(!register);
-    }
+    };
 
     const checkLogin = () => {//render login form if not logged in
         if (login) {
@@ -92,12 +98,11 @@ const App = () => {
         } else {
             return <Login handleSubmit={loginSubmit} toggleRegister={toggleRegister} />
         }
-
-    }
+    };
 
     return (
         <div>
-            <Header />
+            <Header handleLogout={handleLogout} />
             {checkLogin()}
             <Footer />
         </div>

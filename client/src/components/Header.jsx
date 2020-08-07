@@ -1,13 +1,11 @@
 import React from 'react';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 
-const Header = () => {
+const Header = props => {
     return (
         <header>
             <h1><BookmarkIcon />Keeper</h1>
-            <button>
-                <a href="http://localhost:8080/logout">log out</a>
-            </button>
+            <button onClick={props.handleLogout}>log out </button>
         </header>
     );
 };
