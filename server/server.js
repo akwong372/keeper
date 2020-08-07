@@ -1,34 +1,48 @@
 require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const app = express();
-const path = require('path');
 const db = require('./db');
-const session = require('express-session');
+const cookieSession = require('cookie-session');
+const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 // const localStrategy = require('passport-local').Strategy;
 
 const port = process.env.PORT || 8080;
 
-app.use(express.static(path.join(__dirname, '../build')));
+// app.use(cors({
+//     origin: "http://localhost:3000", // allow to server to accept request from different origin
+//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//     credentials: true // allow session cookie from browser to pass through
+// }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const authCheck = (req, res, next) => {
+    if (!req.user) {
+        res.status(401).json({
+            authenticated: false,
+            message: "user has not been authenticated"
+        });
+    } else {
+        next();
+    }
+};
 
 app.use(function (err, req, res, next) {
     console.error(err.stack)
     res.status(500).send('Something broke!')
-})
+});
 
-app.use(session({
-    secret: 'verysecretstring',
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        sameSite: 'none',
-        secure: true
-    }
+app.use(cookieSession({
+    name: 'session',
+    keys: ['key1', 'key2'],
+    maxAge: 24 * 60 * 60 * 1000
 }));
+
+app.use(cookieParser());
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -41,7 +55,6 @@ passport.use(new GoogleStrategy({
     passReqToCallback: true
 },
     (req, accessToken, refreshToken, profile, cb) => {
-        console.log(profile)
         db.UserModel.findOne({ googleId: profile.id }, (err, user) => {
             if (user) {
                 return cb(err, user);
@@ -70,13 +83,19 @@ passport.deserializeUser(function (id, done) {
     });
 });
 
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../build/index.html'))
+app.get('/loggedin', authCheck, (req, res) => {
+    console.log(req.cookies)
+    res.status(200).json({
+        authenticated: true,
+        message: "user successfully authenticated",
+        user: req.user,
+        cookies: req.cookies
+    });
 });
 
 app.post('/login', (req, res, next) => {
 
-    passport.authenticate('local', (err, user, info) => {
+    passport.authenticate('local', { successRedirect: '/' }, (err, user, info) => {
         if (err) {
             return next(err);
         }
@@ -87,10 +106,16 @@ app.post('/login', (req, res, next) => {
             if (logInErr) {
                 return next(logInErr);
             }
-            return res.send('logged in');
+            console.log(req.user)
+            res.redirect('/loggedin');
         });
     })(req, res, next);
 
+});
+
+app.get('/logout', function (req, res) {
+    req.logout();
+    res.redirect('http://localhost:3000/');
 });
 
 app.post('/register', (req, res) => {
