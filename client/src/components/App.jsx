@@ -18,7 +18,7 @@ const App = () => {
             .then((response) => {
                 if (response.data.cookies) {
                     setLogin(true);
-                    setNotes(response.data.user.notes)
+                    setNotes(response.data.user.notes);
                 }
                 console.log(response);
             })
@@ -52,8 +52,8 @@ const App = () => {
         }
         axios.post('/login', user)
             .then((response) => {
-                console.log(response.data);
-                setLogin(true)
+                setLogin(true);
+                setNotes(response.data.user.notes);
             })
             .catch((error) => {
                 console.log(error);
@@ -80,7 +80,10 @@ const App = () => {
 
     const handleLogout = () => {
         axios.get('/logout')
-            .then(() => setLogin(false))
+            .then(() => {
+                setLogin(false);
+                setNotes([]);
+            })
             .catch(err => console.log(err))
     };
 
