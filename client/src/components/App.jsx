@@ -16,7 +16,7 @@ const App = () => {
     useEffect(() => {
         axios.get('http://localhost:3000/loggedin')
             .then((response) => {
-                if (response.data.cookies){
+                if (response.data.cookies) {
                     setLogin(true);
                     setNotes(response.data.user.notes)
                 }
@@ -28,12 +28,15 @@ const App = () => {
     }, []);
 
     const addNote = note => {
-        return setNotes(prev => [...prev, note]);
+        setNotes(prev => [...prev, note]);
     };
 
     const deleteNote = id => {
         setNotes(prev => prev.filter(note => note.id !== id));
-    }
+        axios.post('/deletenote', { id })
+            .then(response => console.log(response))
+            .catch(err => console.log(err));
+    };
 
     const renderNotes = note => {
         return (
@@ -77,9 +80,9 @@ const App = () => {
 
     const handleLogout = () => {
         axios.get('/logout')
-        .then(() => setLogin(false))
-        .catch(err => console.log(err))
-    }
+            .then(() => setLogin(false))
+            .catch(err => console.log(err))
+    };
 
     const toggleRegister = () => {
         setRegister(!register);

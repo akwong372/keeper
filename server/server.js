@@ -63,7 +63,7 @@ passport.use(new GoogleStrategy({
                     googleId: profile.id,
                     username: profile._json.given_name,
                     email: profile._json.email,
-                    notes:[]
+                    notes: []
                 }, (err, newUser) => {
                     return cb(err, newUser);
                 })
@@ -148,11 +148,21 @@ app.post('/note', (req, res) => {
         $push: {
             notes: note
         }
-    }, {new: true, useFindAndModify: false}, (err, user) => {
-        console.log(user)
-    })
-    res.send('ok')
-})
+    }, { useFindAndModify: false }, (err, user) => {
+        res.send('ok');
+    });
+});
+
+app.post('/deletenote', (req, res) => {
+    let userId = req.user._id;
+    db.UserModel.findByIdAndUpdate(userId, {
+        $pull: {
+            notes: { id: req.body.id }
+        }
+    }, { useFindAndModify: false }, (err, notes) => {
+        res.send('deleted');
+    });
+});
 
 
 app.listen(port, console.log(`Listening on port ${port}`));
