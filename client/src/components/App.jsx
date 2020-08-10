@@ -20,7 +20,6 @@ const App = () => {
                     setLogin(true);
                     setNotes(response.data.user.notes);
                 }
-                console.log(response);
             })
             .catch((err) => {
                 console.log(err);
@@ -70,7 +69,6 @@ const App = () => {
         }
         axios.post('/register', user)
             .then((response) => {
-                console.log(response.data);
                 setLogin(true)
             })
             .catch((error) => {
@@ -108,7 +106,7 @@ const App = () => {
 
     return (
         <div>
-            <Header handleLogout={handleLogout} />
+            <Header handleLogout={handleLogout} loggedIn={login}/>
             {checkLogin()}
             <Footer />
         </div>

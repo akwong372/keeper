@@ -55,7 +55,7 @@ const CreateArea = props => {
                 {focus && <input name='title' placeholder='Title' onChange={handleChange} value={note.title} />}
                 <textarea name='content' placeholder='Take a note...' rows={focus ? 3 : 1} onChange={handleChange} onFocus={onFocus} value={note.content} />
                 <Zoom in={focus} timeout={250}>
-                    <Fab color="primary" aria-label="add" type="submit">
+                    <Fab className='submitButton' color="primary" aria-label="add" type="submit">
                         <AddIcon />
                     </Fab>
                 </Zoom>

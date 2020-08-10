@@ -8,15 +8,9 @@ const cookieSession = require('cookie-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-// const localStrategy = require('passport-local').Strategy;
 
 const port = process.env.PORT || 8080;
 
-// app.use(cors({
-//     origin: "http://localhost:3000", // allow to server to accept request from different origin
-//     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//     credentials: true // allow session cookie from browser to pass through
-// }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -24,7 +18,7 @@ const authCheck = (req, res, next) => {
     if (!req.user) {
         res.status(401).json({
             authenticated: false,
-            message: "user has not been authenticated"
+            message: 'user has not been authenticated'
         });
     } else {
         next();
@@ -87,14 +81,13 @@ passport.deserializeUser((id, done) => {
 app.get('/loggedin', authCheck, (req, res) => {
     res.status(200).json({
         authenticated: true,
-        message: "user successfully authenticated",
+        message: 'user successfully authenticated',
         user: req.user,
         cookies: req.cookies
     });
 });
 
 app.post('/login', (req, res, next) => {
-
     passport.authenticate('local', { successRedirect: '/' }, (err, user, info) => {
         if (err) {
             return next(err);
@@ -110,7 +103,6 @@ app.post('/login', (req, res, next) => {
             res.redirect('/loggedin');
         });
     })(req, res, next);
-
 });
 
 app.get('/logout', (req, res) => {
@@ -119,7 +111,6 @@ app.get('/logout', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-
     db.UserModel.register({ username: req.body.username, email: req.body.email, notes: [] }, req.body.password, (err, user) => {
         if (err) {
             console.log(`Error registering: ${err.name}: ${err.message}`);

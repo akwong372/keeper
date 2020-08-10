@@ -101,10 +101,32 @@ form.create-note button {
   background: #f5ba13;
   color: #fff;
   border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
+  border-radius: 16px;
+  width: 64px;
+  height: 32px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   outline: none;
+}
+
+form.create-note button:hover {
+  background: #d19e11;
+}
+
+.logout {
+  position: absolute;
+  background: #fff;
+  color: #f5ba13;
+  right: 5em;
+  top: 2em;
+  border: none;
+  border-radius: 16px;
+  width: 64px;
+  height: 32px;
+  cursor: pointer;
+  outline: none;
+}
+
+.logout:hover {
+  background: rgb(247, 247, 247);
 }

@@ -5,7 +5,7 @@ const Header = props => {
     return (
         <header>
             <h1><BookmarkIcon />Keeper</h1>
-            <button onClick={props.handleLogout}>log out </button>
+            {props.loggedIn && <button className='logout' onClick={props.handleLogout}>log out </button>}
         </header>
     );
 };
