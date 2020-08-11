@@ -130,3 +130,31 @@ form.create-note button:hover {
 .logout:hover {
   background: rgb(247, 247, 247);
 }
+
+a:link {
+  text-decoration: none;
+  color: #fff;
+}
+
+a:visited {
+  color: #fff;
+}
+
+.loginButtons {
+  margin: 5px;
+  right: 18px;
+  bottom: -18px;
+  background: #f5ba13;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  width: 170px;
+  height: 32px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  outline: none;
+}
+
+.googleIcon {
+  margin-right: 5px;
+}

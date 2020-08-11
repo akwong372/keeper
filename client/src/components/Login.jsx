@@ -1,5 +1,6 @@
 import React from 'react';
 import InputBox from './InputBox';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const Login = props => {
     return (
@@ -9,9 +10,14 @@ const Login = props => {
                 <InputBox labelFor='password' labelText='Password' type='password' placeholder='password here' />
                 <button className='submitButton'>Login</button>
             </form>
-            <button onClick={props.toggleRegister}>Register New</button>
+            <button className='loginButtons' onClick={props.toggleRegister}>Register New</button>
             <div>
-                <a href="http://localhost:8080/auth/google">Sign In with Google</a>
+                <button className='loginButtons'>
+                    <a href="http://localhost:8080/auth/google">
+                        <FontAwesomeIcon className='googleIcon' icon={['fab', 'google']} />
+                        Sign In With Google
+                </a>
+                </button>
             </div>
         </div>
     )

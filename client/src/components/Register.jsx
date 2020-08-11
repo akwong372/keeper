@@ -10,7 +10,7 @@ const Register = props => {
                 <InputBox labelFor='email' labelText='Email' type='email' placeholder='email here' />
                 <button>Register</button>
             </form>
-            <button onClick={props.toggleRegister}>Login Existing</button>
+            <button className='loginButtons' onClick={props.toggleRegister}>Login Existing</button>
         </div>
 
     )

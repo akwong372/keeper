@@ -11,6 +11,12 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const port = process.env.PORT || 8080;
 
+app.use(cors({	
+    origin: "http://localhost:3000", // allow to server to accept request from different origin	
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",	
+    credentials: true // allow session cookie from browser to pass through	
+}));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

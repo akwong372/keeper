@@ -6,6 +6,10 @@ import Footer from './Footer';
 import CreateArea from './CreateArea';
 import Login from './Login';
 import Register from './Register';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fab } from '@fortawesome/free-brands-svg-icons';
+
+library.add(fab);
 
 const App = () => {
 
@@ -106,7 +110,7 @@ const App = () => {
 
     return (
         <div>
-            <Header handleLogout={handleLogout} loggedIn={login}/>
+            <Header handleLogout={handleLogout} loggedIn={login} />
             {checkLogin()}
             <Footer />
         </div>
