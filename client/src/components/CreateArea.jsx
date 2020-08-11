@@ -32,7 +32,7 @@ const CreateArea = props => {
             };
 
             axios.post('/note', noteWithId)
-                .then(response => console.log(response))
+                .then(response => console.log(response.data))
                 .catch(err => console.log(err))
 
             props.addNote(noteWithId);

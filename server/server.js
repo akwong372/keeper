@@ -11,9 +11,9 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const port = process.env.PORT || 8080;
 
-app.use(cors({	
+app.use(cors({
     origin: "http://localhost:3000", // allow to server to accept request from different origin	
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",	
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true // allow session cookie from browser to pass through	
 }));
 
@@ -62,7 +62,6 @@ passport.use(new GoogleStrategy({
                 db.UserModel.create({
                     googleId: profile.id,
                     username: profile._json.given_name,
-                    email: profile._json.email,
                     notes: []
                 }, (err, newUser) => {
                     return cb(err, newUser);
@@ -117,20 +116,20 @@ app.get('/logout', (req, res) => {
 });
 
 app.post('/register', (req, res) => {
-    db.UserModel.register({ username: req.body.username, email: req.body.email, notes: [] }, req.body.password, (err, user) => {
+    db.UserModel.register({ username: req.body.username, notes: [] }, req.body.password, (err, user) => {
         if (err) {
             console.log(`Error registering: ${err.name}: ${err.message}`);
-            res.send(err.message);
+            res.send(err);
         } else {
             passport.authenticate('local')(req, res, () => {
-                res.send('logged in');
+                res.redirect('/loggedin');
             });
         }
     })
 });
 
 app.get('/auth/google',
-    passport.authenticate('google', { scope: ['profile', 'email'] }));
+    passport.authenticate('google', { scope: ['profile'] }));
 
 app.get('/auth/google/login',
     passport.authenticate('google'),

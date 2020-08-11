@@ -113,21 +113,27 @@ form.create-note button:hover {
   background: #d19e11;
 }
 
-.logout {
+.logoutGroup {
+  position: absolute;
+  color: #fff;
+  right: 5em;
+  top: 0.5em;
+}
+
+.logoutButton {
   position: absolute;
   background: #fff;
   color: #f5ba13;
-  right: 5em;
-  top: 2em;
   border: none;
   border-radius: 16px;
+  margin-top: 5px;
   width: 64px;
   height: 32px;
   cursor: pointer;
   outline: none;
 }
 
-.logout:hover {
+.logoutButton:hover {
   background: rgb(247, 247, 247);
 }
 
@@ -155,6 +161,15 @@ a:visited {
   outline: none;
 }
 
+.loginButtons:hover {
+  background: #d19e11;
+}
+
 .googleIcon {
   margin-right: 5px;
+}
+
+.loginError{
+  color: red;
+  text-align: center;
 }

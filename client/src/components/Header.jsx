@@ -5,7 +5,12 @@ const Header = props => {
     return (
         <header>
             <h1><BookmarkIcon />Keeper</h1>
-            {props.loggedIn && <button className='logout' onClick={props.handleLogout}>log out </button>}
+            {props.loggedIn &&
+                <div className='logoutGroup'>
+                    <p>Hi, {props.username}</p>
+                    <button className='logoutButton' onClick={props.handleLogout}>Log out </button>
+                </div>
+            }
         </header>
     );
 };

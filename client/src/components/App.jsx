@@ -13,9 +13,11 @@ library.add(fab);
 
 const App = () => {
 
-    const [notes, setNotes] = useState([]);
     const [login, setLogin] = useState(false);
+    const [notes, setNotes] = useState([]);
     const [register, setRegister] = useState(true);
+    const [username, setUsername] = useState('');
+    const [errorText, setErrorText] = useState('');
 
     useEffect(() => {
         axios.get('http://localhost:3000/loggedin')
@@ -23,6 +25,7 @@ const App = () => {
                 if (response.data.cookies) {
                     setLogin(true);
                     setNotes(response.data.user.notes);
+                    setUsername(response.data.user.username);
                 }
             })
             .catch((err) => {
@@ -37,7 +40,7 @@ const App = () => {
     const deleteNote = id => {
         setNotes(prev => prev.filter(note => note.id !== id));
         axios.post('/deletenote', { id })
-            .then(response => console.log(response))
+            .then(response => console.log(response.data))
             .catch(err => console.log(err));
     };
 
@@ -55,8 +58,14 @@ const App = () => {
         }
         axios.post('/login', user)
             .then((response) => {
-                setLogin(true);
-                setNotes(response.data.user.notes);
+                if (response.data.authenticated) {
+                    setLogin(true);
+                    setNotes(response.data.user.notes);
+                    setUsername(response.data.user.username);
+                    setErrorText('');
+                } else {
+                    setErrorText(response.data.message);
+                }
             })
             .catch((error) => {
                 console.log(error);
@@ -68,12 +77,17 @@ const App = () => {
         e.persist()
         const user = {
             username: e.target[0].value,
-            password: e.target[1].value,
-            email: e.target[2].value
+            password: e.target[1].value
         }
         axios.post('/register', user)
             .then((response) => {
-                setLogin(true)
+                if (response.data.authenticated) {
+                    setLogin(true);
+                    setUsername(response.data.user.username);
+                    setErrorText('');
+                } else {
+                    setErrorText(response.data.message);
+                }
             })
             .catch((error) => {
                 console.log(error);
@@ -85,6 +99,7 @@ const App = () => {
             .then(() => {
                 setLogin(false);
                 setNotes([]);
+                setUsername('');
             })
             .catch(err => console.log(err))
     };
@@ -110,8 +125,9 @@ const App = () => {
 
     return (
         <div>
-            <Header handleLogout={handleLogout} loggedIn={login} />
+            <Header username={username} handleLogout={handleLogout} loggedIn={login} />
             {checkLogin()}
+            <div className='loginError'>{errorText}</div>
             <Footer />
         </div>
     );
