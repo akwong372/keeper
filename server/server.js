@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
@@ -10,6 +11,8 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 const port = process.env.PORT || 8080;
+
+mongoose.connect(process.env.DB_URL, { useUnifiedTopology: true, useNewUrlParser: true });
 
 app.use(cors({
     origin: "http://localhost:3000", // allow to server to accept request from different origin	
