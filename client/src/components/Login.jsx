@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 const Login = props => {
     return (
         <div>
-            <form action='/login' method='POST' className="create-note" onSubmit={e => props.handleSubmit(e)}>
+            <form action='/auth/login' method='POST' className="create-note" onSubmit={e => props.handleSubmit(e)}>
                 <InputBox labelFor='username' labelText='Username' type='username' placeholder='username here' />
                 <InputBox labelFor='password' labelText='Password' type='password' placeholder='password here' />
                 <button className='submitButton'>Login</button>

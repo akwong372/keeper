@@ -39,7 +39,7 @@ const App = () => {
 
     const deleteNote = id => {
         setNotes(prev => prev.filter(note => note.id !== id));
-        axios.post('/deletenote', { id })
+        axios.post('/note/delete', { id })
             .then(response => console.log(response.data))
             .catch(err => console.log(err));
     };
@@ -56,7 +56,7 @@ const App = () => {
             username: e.target[0].value,
             password: e.target[1].value
         }
-        axios.post('/login', user)
+        axios.post('/auth/login', user)
             .then((response) => {
                 if (response.data.authenticated) {
                     setLogin(true);
@@ -79,7 +79,7 @@ const App = () => {
             username: e.target[0].value,
             password: e.target[1].value
         }
-        axios.post('/register', user)
+        axios.post('/auth/register', user)
             .then((response) => {
                 if (response.data.authenticated) {
                     setLogin(true);
@@ -95,7 +95,7 @@ const App = () => {
     };
 
     const handleLogout = () => {
-        axios.get('/logout')
+        axios.get('/auth/logout')
             .then(() => {
                 setLogin(false);
                 setNotes([]);

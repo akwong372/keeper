@@ -31,7 +31,7 @@ const CreateArea = props => {
                 id: uuidv4()
             };
 
-            axios.post('/note', noteWithId)
+            axios.post('/note/create', noteWithId)
                 .then(response => console.log(response.data))
                 .catch(err => console.log(err))
 
