@@ -60,7 +60,7 @@ router.post('/login', (req, res, next) => {
 
 router.get('/logout', (req, res) => {
     req.logout();
-    res.redirect('http://localhost:3000/');
+    res.redirect('/');//change to http://localhost:3000/ in dev
 });
 
 router.post('/register', (req, res) => {
@@ -82,7 +82,7 @@ router.get('/google',
 router.get('/google/login',
     passport.authenticate('google'),
     (req, res) => {
-        res.redirect('http://localhost:3000/');
+        res.redirect('/');//change to http://localhost:3000/ in dev
     });
 
 module.exports = router;
