@@ -8,7 +8,7 @@ const GoogleStrategy = require('passport-google-oauth20').Strategy;
 passport.use(new GoogleStrategy({
     clientID: KEYS.GOOGLE_ID,
     clientSecret: KEYS.GOOGLE_SECRET,
-    callbackURL: 'http://localhost:8080/auth/google/login',
+    callbackURL: 'https://keeper-app-1.herokuapp.com/auth/google/login',//change to http://localhost:8080/ in dev
     userProfileURL: 'https://www.googleapis.com/oauth2/v3/userinfo',
     passReqToCallback: true
 },
