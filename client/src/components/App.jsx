@@ -20,7 +20,7 @@ const App = () => {
     const [errorText, setErrorText] = useState('');
 
     useEffect(() => {
-        axios.get('http://localhost:3000/loggedin')
+        axios.get('/loggedin')//change to http://localhost:3000/ in dev
             .then((response) => {
                 if (response.data.cookies) {
                     setLogin(true);

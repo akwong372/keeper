@@ -2,6 +2,8 @@ import React from 'react';
 import InputBox from './InputBox';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+//change to http://localhost:8080/ in dev
+
 const Login = props => {
     return (
         <div>
@@ -13,7 +15,7 @@ const Login = props => {
             <button className='loginButtons' onClick={props.toggleRegister}>Register New</button>
             <div>
                 <button className='loginButtons'>
-                    <a href="http://localhost:8080/auth/google">
+                    <a href="/auth/google">
                         <FontAwesomeIcon className='googleIcon' icon={['fab', 'google']} />
                         Sign In With Google
                 </a>
