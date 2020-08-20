@@ -1,5 +1,7 @@
 # Keeper
 
+![Gif of app](https://i.imgur.com/QkTxCej.gifv)
+
 A clone of Google Keep, but also featuring the ability to log in/out using Passport.js<br />
 The ability to log in using a Google account through OAuth 2.0 was also added.<br />
 
